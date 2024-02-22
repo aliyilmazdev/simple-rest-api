@@ -61,7 +61,7 @@ const getUpdate = async (req, res) => {
     const { id } = req.params;
     const { name, description, stock, date } = req.body;
 
-    const updatedProduct = await ProductSchema.findByIdAndUpdate(
+    await ProductSchema.findByIdAndUpdate(
       id,
       { name, description, stock, date },
       {
@@ -98,12 +98,11 @@ const deleteProduct = async (req, res) => {
 
 const searchProduct = async (req, res) => {
   try {
-    const { search, tag } = req.query;
-    const title = new RegExp(search, "i");
+    const { search } = req.query;
+    const name = new RegExp(search, "i");
 
     const products = await ProductSchema.find({
-      $or: [{ title }],
-      tag: { $in: tag.split(",") },
+      $or: [{ name }],
     });
 
     res.status(200).json({
